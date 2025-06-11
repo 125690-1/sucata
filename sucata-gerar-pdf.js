@@ -37,7 +37,7 @@ document.getElementById("gerarPdfBtn").addEventListener("click", async function 
   };
 
   try {
-    const response = await fetch("https://backend-atendimento-materiais-818351890829.southamerica-east1.run.app/enviar", {
+    const response = await fetch("https://backend-controle-materiais-818351890829.southamerica-east1.run.app/enviar", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
