@@ -13,7 +13,7 @@ document.getElementById("gerar-pdf").addEventListener("click", function () {
   }
   const recebeu = document.getElementById("recebido-por").value.toUpperCase();
   const lead = document.getElementById("lead").value.toUpperCase();
-  const entregou = document.getElementById("entregue-por").value.toUpperCase();
+  const entregou = document.getElementById("entregue_por").value.toUpperCase();
   const ane = document.getElementById("ane").value.toUpperCase();
   const osInput = document.getElementById("campo-os");
   const ordemServico = osInput ? osInput.value.toUpperCase() : "";
