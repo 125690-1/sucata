@@ -113,7 +113,11 @@ document.getElementById("gerar-pdf").addEventListener("click", function () {
   doc.line(115, rodapeY, 190, rodapeY);
   doc.text("SOLICITANTE", 139, rodapeY + 5);
 
-  doc.save("formulario-sucata.pdf");
+  const tipo = "SUCATA";
+  const nomeArquivo = ordemServico
+    ? `${tipo} ${ordemServico}.pdf`
+    : `${tipo} ${ane}.pdf`;
+  doc.save(nomeArquivo);
 
   // Enviar os dados para o backend
   const payload = {
