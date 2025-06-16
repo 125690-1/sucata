@@ -109,9 +109,9 @@ document.getElementById("gerar-pdf").addEventListener("click", function () {
   const pageHeight = doc.internal.pageSize.height;
   const rodapeY = pageHeight - 18;
   doc.line(20, rodapeY, 98, rodapeY);
-  doc.text("ATENDENTE", 44, rodapeY + 5);
+  doc.text("MRO", 52, rodapeY + 5);
   doc.line(115, rodapeY, 190, rodapeY);
-  doc.text("SOLICITANTE", 139, rodapeY + 5);
+  doc.text("OPERAÇÃO", 139, rodapeY + 5);
 
   const tipo = "SUCATA";
   const nomeArquivo = ordemServico
