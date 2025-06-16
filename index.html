@@ -37,8 +37,8 @@
     </div>
 
     <div class="form-group">
-      <label for="entregue-por">Entregue por</label>
-      <input type="text" list="receptador" id="entregue-por">
+      <label for="entregue_por">Entregue por</label>
+      <input type="text" list="receptador" id="entregue_por">
       <datalist id="receptador"></datalist>
     </div>
 
@@ -68,32 +68,13 @@
             <th>QTD.</th>
           </tr>
         </thead>
-        <tbody id="tabela-materiais">
-          <tr>
-            <td>
-              <input type="text" class="codigo" list="lista-codigos" />
-            </td>
-            <td>
-              <input type="text" class="descricao" list="lista-descricoes" />
-            </td>
-            <td>
-              <input type="text" class="un" readonly />
-            </td>
-            <td>
-              <input type="number" class="quantidade" min="1" />
-            </td>
-          </tr>
-        </tbody>
+        <tbody id="tabela-materiais"></tbody>
       </table>
     </div>
     <datalist id="lista-codigos"></datalist>
     <datalist id="lista-descricoes"></datalist>
-
-    <datalist id="lista-descricoes"></datalist>
-
-    <button id="gerar-pdf" class="gerar-btn">Gerar PDF</button>
-
-    
+    <button id="adicionar-linha">➕ Adicionar Linha</button>
+    <button id="gerar-pdf" class="gerar-btn">Gerar PDF</button>    
   </div>
 
   <!-- Bibliotecas jsPDF -->
