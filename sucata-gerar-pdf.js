@@ -1,12 +1,17 @@
-
 async function enviarParaPlanilha() {
   const base = document.getElementById("base").value.toUpperCase();
-  const data = document.getElementById("data").value;
+  const dataInput = document.getElementById("data").value;
+  let data = dataInput;
+  if (dataInput && dataInput.includes("-")) {
+    const partes = dataInput.split("-");
+    data = `${partes[2]}/${partes[1]}/${partes[0]}`; // dd/mm/aaaa
+  }
   const mro = document.getElementById("atendido-por")?.value?.toUpperCase() || document.getElementById("recebido-por")?.value?.toUpperCase();
   const operacao = document.getElementById("solicitado-por")?.value?.toUpperCase() || document.getElementById("entregue-por")?.value?.toUpperCase();
   const lead = document.getElementById("lead").value.toUpperCase();
   const ane = document.getElementById("ane").value.toUpperCase();
-  const ordemServico = document.getElementById("campo-os").value.toUpperCase();
+  const osInput = document.getElementById("campo-os");
+  const ordemServico = osInput ? osInput.value.toUpperCase() : "";
 
   const materiais = Array.from(document.querySelectorAll("#tabela-materiais tr")).map(tr => {
     const inputs = tr.querySelectorAll("input");
@@ -31,21 +36,99 @@ async function enviarParaPlanilha() {
   };
 
   try {
-    const response = await fetch("https://backend-controle-materiais-818351890829.southamerica-east1.run.app/enviar", {
+    const resposta = await fetch("https://backend-controle-materiais-818351890829.southamerica-east1.run.app/enviar", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(dados)
-    });
-    const result = await response.json();
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(dados),
+    }); 
+
+    const result = await resposta.json();
+
+    if (resposta.ok) {
+      alert(result.mensagem || "✅ PDF gerado e dados enviados com sucesso para o Controle de Materiais!");
+    } else {
+      alert(result.erro || "❌ Erro ao enviar dados para a planilha.");
+    }
+
     console.log("Resultado:", result);
-    alert(result.mensagem || result.erro || "Erro desconhecido.");
-  } catch (err) {
-    alert("Erro ao enviar para a planilha: " + err);
+  } catch (erro) {
+    console.error(erro);
+    alert("❌ Erro inesperado ao enviar dados.");
   }
 }
 
+// === VALIDAÇÃO DE CAMPOS OBRIGATÓRIOS ===
+let tipoOrdemSelecionado = "";
+
+function mostrarCampoOS(tipo) {
+  tipoOrdemSelecionado = tipo;
+  const container = document.getElementById("os-container");
+  container.innerHTML = "";
+
+  const label = document.createElement("label");
+  label.textContent = `Ordem de Serviço (${tipo})`;
+
+  const input = document.createElement("input");
+  input.id = "campo-os";
+  input.maxLength = 10;
+  input.inputMode = "numeric";
+
+  if (tipo === "INC") {
+    input.type = "text";
+    input.placeholder = "Somente números";
+    input.addEventListener("input", function () {
+      input.value = input.value.replace(/\D/g, "").slice(0, 8);
+    });
+  } else if (tipo === "DT" || tipo === "BA") {
+    input.type = "text";
+    input.value = tipo;
+    input.addEventListener("input", function () {
+      let numeros = input.value.replace(/\D/g, "").slice(0, 8);
+      input.value = tipo + numeros;
+    });
+  }
+
+  container.appendChild(label);
+  container.appendChild(input);
+}
+
+function validarCamposObrigatorios() {
+  const base = document.getElementById("base").value.trim();
+  const data = document.getElementById("data").value.trim();
+  const mro = document.getElementById("recebido-por").value.trim();
+  const lead = document.getElementById("lead").value.trim();
+  const operacao = document.getElementById("entregue-por").value.trim();
+  const ane = document.getElementById("ane").value.trim();
+  const osInput = document.getElementById("campo-os");
+  const ordemServico = osInput ? osInput.value.trim().toUpperCase() : "";
+
+  if (!base) return alert("⚠️ Preencha o campo BASE.");
+  if (!data) return alert("⚠️ Preencha o campo DATA.");
+  if (!mro) return alert("⚠️ Preencha o campo RECEBIDO POR.");
+  if (!lead) return alert("⚠️ Preencha o campo LEAD.");
+  if (!operacao) return alert("⚠️ Preencha o campo ENTREGUE POR.");
+  if (!ane && !ordemServico) return alert("⚠️ Preencha ao menos o campo ANE ou a ORDEM DE SERVIÇO.");
+
+  if (ane && !/^\d{7}$/.test(ane)) {
+    return alert("⚠️ O campo ANE deve conter exatamente 7 dígitos numéricos.");
+  }
+
+  if (ordemServico) {
+    if (tipoOrdemSelecionado === "INC" && !/^\d{8}$/.test(ordemServico)) {
+      return alert("⚠️ Ordem de serviço (INC) deve conter exatamente 8 números.");
+    }
+    if ((tipoOrdemSelecionado === "DT" || tipoOrdemSelecionado === "BA") && !new RegExp(`^${tipoOrdemSelecionado}\\d{8}$`).test(ordemServico)) {
+      return alert(`⚠️ Ordem de serviço (${tipoOrdemSelecionado}) deve ter o formato ${tipoOrdemSelecionado} + 8 números.(Ex: ${tipoOrdemSelecionado}12345678)`);
+    }
+  }
+
+  return true;
+}
 
 document.getElementById("gerar-pdf").addEventListener("click", async function () {
+  if (!validarCamposObrigatorios()) return;
   await enviarParaPlanilha();
   const doc = new window.jspdf.jsPDF();
 
