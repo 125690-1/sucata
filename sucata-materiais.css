@@ -122,27 +122,6 @@ tbody input {
   background-color: #1e7e34;
 }
 
-/* Largura personalizada das colunas da tabela no formulário */
-table thead th:nth-child(1),
-table tbody td:nth-child(1) {
-  width: 7%; /* CÓDIGO */
-}
-
-table thead th:nth-child(2),
-table tbody td:nth-child(2) {
-  width: 50%; /* DESCRIÇÃO */
-}
-
-table thead th:nth-child(3),
-table tbody td:nth-child(3) {
-  width: 10%; /* UN */
-}
-
-table thead th:nth-child(4),
-table tbody td:nth-child(4) {
-  width: 10%; /* QTD. */
-}
-
 #adicionar-linha {
   background-color: #1976d2;         /* Azul moderno */
   color: white;
@@ -161,4 +140,36 @@ table tbody td:nth-child(4) {
 #adicionar-linha:hover {
   background-color: #125ea3;
   transform: translateY(-1px);
+}
+
+/* ✅ PERSONALIZE A LARGURA DAS COLUNAS DA TABELA */
+.tabela-materiais .coluna-1,
+.tabela-materiais td.coluna-1 {
+  width: 20%;       /* CÓDIGO */
+  min-width: 75px;
+}
+
+.tabela-materiais .coluna-2,
+.tabela-materiais td.coluna-2 {
+  width: 50%;       /* DESCRIÇÃO */
+  min-width: 150px;
+}
+
+.tabela-materiais .coluna-3,
+.tabela-materiais td.coluna-3 {
+  width: 9%;       /* UN */
+  min-width: 35px;
+}
+
+.tabela-materiais .coluna-4,
+.tabela-materiais td.coluna-4 {
+  width: 15%;       /* QTD. */
+  min-width: 50px;
+}
+
+/* Garante que os campos input ocupem toda a célula */
+.tabela-materiais td input {
+  width: 100%;
+  font-size: 14px;
+  box-sizing: border-box;
 }
